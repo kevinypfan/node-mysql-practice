@@ -16,52 +16,43 @@ var con = mysql.createConnection({
 app.use(bodyParser.json())
 app.use(express.static(__dirname))
 
-
+con.connect();
 app.get('/tabledata/:table', (req, res) => {
-  con.connect();
   con.query(`SELECT * FROM ${req.params.table}`, function (err, result) {
     if (err) {
       res.send(err);
     }
     res.send(result)
   });
-  con.end();
 })
 
 app.post('/insertdata', (req, res) => {
-  var body = _.pick(req.body, ['values', 'table'])
-  console.log(body);
-  con.connect();
-  con.query(`INSERT INTO ${body.table} (id, mon, tue, wed, thu, fri) VALUES ?`, [body.values], function (err, result) {
+  console.log(req.body);
+  con.query(`INSERT INTO ${req.body.tableName} (mon, tue, wed, thu, fri) VALUES ?`, [req.body.values], function (err, result) {
     if (err) {
       res.send(err);
     }
     res.send(result)
   });
-  con.end();
 })
 
 app.get('/tablename',(req, res) => {
-  con.connect();
   con.query(`SHOW TABLES IN nodedata`, function(err, result) {
     if (err) {
       res.send(err);
     }
     res.send(result)
   });
-  con.end();
 })
 
-app.get('/database/:database', (req, res) => {
-  con.connect();
-  var database = req.params.database;
-  con.query(`CREATE TABLE ${database} (id INT PRIMARY KEY, mon VARCHAR(255), tue VARCHAR(255), wed VARCHAR(255), thu VARCHAR(255), fri VARCHAR(255))`, function(err, result) {
+app.post('/createtable', (req, res) => {
+  var tableName = req.body.tableName;
+  con.query(`CREATE TABLE ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, mon VARCHAR(255), tue VARCHAR(255), wed VARCHAR(255), thu VARCHAR(255), fri VARCHAR(255))`, function(err, result) {
     if (err) {
       res.send(err);
     }
-    res.send(result)
+    res.send(tableName)
   });
-  con.end();
 })
 
 app.use(fallback('index.html', { root: __dirname }))
