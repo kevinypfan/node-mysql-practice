@@ -2,6 +2,7 @@ const mysql = require('mysql');
 const express = require('express')
 const _ = require('lodash')
 const bodyParser = require('body-parser')
+const fallback = require('express-history-api-fallback')
 
 var app = express();
 
@@ -13,6 +14,8 @@ var con = mysql.createConnection({
 });
 
 app.use(bodyParser.json())
+app.use(express.static(__dirname))
+
 
 app.get('/tabledata/:table', (req, res) => {
   con.connect();
@@ -61,7 +64,7 @@ app.get('/database/:database', (req, res) => {
   con.end();
 })
 
-
+app.use(fallback('index.html', { root: __dirname }))
 
 app.listen(3000, () => {
   console.log('start up port 3000');
