@@ -20,7 +20,7 @@ con.connect();
 app.get('/tabledata/:table', (req, res) => {
   con.query(`SELECT * FROM ${req.params.table}`, function (err, result) {
     if (err) {
-      res.send(err);
+      res.status(400).send(err);
     }
     res.send(result)
   });
@@ -30,7 +30,7 @@ app.post('/insertdata', (req, res) => {
   console.log(req.body);
   con.query(`INSERT INTO ${req.body.tableName} (mon, tue, wed, thu, fri) VALUES ?`, [req.body.values], function (err, result) {
     if (err) {
-      res.send(err);
+      res.status(400).send(err);
     }
     res.send(result)
   });
@@ -39,7 +39,7 @@ app.post('/insertdata', (req, res) => {
 app.get('/tablename',(req, res) => {
   con.query(`SHOW TABLES IN nodedata`, function(err, result) {
     if (err) {
-      res.send(err);
+      res.status(400).send(err);
     }
     res.send(result)
   });
@@ -49,7 +49,7 @@ app.post('/createtable', (req, res) => {
   var tableName = req.body.tableName;
   con.query(`CREATE TABLE ${tableName} (id INT AUTO_INCREMENT PRIMARY KEY, mon VARCHAR(255), tue VARCHAR(255), wed VARCHAR(255), thu VARCHAR(255), fri VARCHAR(255))`, function(err, result) {
     if (err) {
-      res.send(err);
+      res.status(400).send(err);
     }
     res.send(tableName)
   });

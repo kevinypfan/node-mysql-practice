@@ -15,7 +15,7 @@ export const router = new Router({
       component: Home
     },
     {
-      path: '/tables',
+      path: '/tables/:id',
       component: Tables
     },
     {

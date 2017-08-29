@@ -46,6 +46,11 @@ export default {
   methods: {
    sendTable() {
      this.$store.dispatch('insertTable', {values: this.table, tableName: this.$store.getters.getNewTable})
+      .then(() => {
+        this.$router.push(`/tables/${this.$store.getters.getNewTable}`)
+      }).catch(() => {
+        console.log('失敗')
+      })
      }
    },
    computed: {

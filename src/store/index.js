@@ -25,12 +25,14 @@ export const store = new Vuex.Store({
       })
     },
     insertTable ({commit}, payload) {
-      Vue.axios.post('/insertdata', payload)
-        .then((result) => {
-          console.log(result);
-        }).catch((err) => {
-          console.log(err);
-        })
+      return new Promise((resolve, reject) => {
+        Vue.axios.post('/insertdata', payload)
+          .then((result) => {
+            resolve();
+          }).catch((err) => {
+            reject();
+          })
+      })
     }
   },
   getters: {

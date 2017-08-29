@@ -32,7 +32,7 @@ export default {
   },
   watch: {
     getNewTable (value) {
-      if (value !== null && value !== undefined) {
+      if (value !== null || value !== undefined) {
         this.$router.push('/insert')
       }
     }
