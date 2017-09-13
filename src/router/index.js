@@ -15,15 +15,15 @@ export const router = new Router({
       component: Home
     },
     {
-      path: '/tables/:id',
+      path: '/tables',
       component: Tables
     },
     {
-      path: '/createtable',
+      path: '/createTable',
       component: CreateTable
     },
     {
-      path: '/insert',
+      path: '/insertTable',
       component: InsertTable
     },
     {
@@ -31,5 +31,5 @@ export const router = new Router({
       redirect: '/'
     }
   ],
-  mode: 'history'
+  mode: "history"
 })

@@ -1,11 +1,13 @@
 var path = require('path')
 var webpack = require('webpack')
 
+var hot = 'webpack-hot-middleware/client?reload=true'
+
 module.exports = {
-  entry: './src/main.js',
+  entry: ['./src/main.js', hot],
   output: {
     path: path.resolve(__dirname, './dist'),
-    publicPath: '/dist/',
+    publicPath: 'http://localhost:3000/dist/',
     filename: 'build.js'
   },
   module: {
@@ -45,7 +47,11 @@ module.exports = {
   performance: {
     hints: false
   },
-  devtool: '#eval-source-map'
+  devtool: '#eval-source-map',
+  plugins: [
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
+  ]
 }
 
 if (process.env.NODE_ENV === 'production') {

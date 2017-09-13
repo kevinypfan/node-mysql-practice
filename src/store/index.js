@@ -5,42 +5,22 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
-    state: [],
     title: 'Hello',
-    newTable: null
+    num: 0
   },
   mutations: {
-    setNewTable (state, payload) {
-      state.newTable = payload
+    setNum (state, payload) {
+      state.num = state.num + payload
     }
   },
   actions: {
-    createTable ({commit}, payload) {
-      Vue.axios.post('/createtable', payload)
-      .then((result) => {
-        console.log(result)
-        commit('setNewTable', result.data)
-      }).catch((err) => {
-        console.log(err)
-      })
-    },
-    insertTable ({commit}, payload) {
-      return new Promise((resolve, reject) => {
-        Vue.axios.post('/insertdata', payload)
-          .then((result) => {
-            resolve();
-          }).catch((err) => {
-            reject();
-          })
-      })
+    plusSome ({commit}, payload) {
+      commit('setNum', payload)
     }
   },
   getters: {
     getTitle (state) {
-      return state.title + 'World'
-    },
-    getNewTable (state) {
-      return state.newTable
+      return state.title + "world"
     }
   }
 })
