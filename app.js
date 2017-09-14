@@ -17,6 +17,20 @@ app.use(bodyParser.json())
 app.use(express.static(__dirname))
 
 con.connect();
+
+app.get('/test', (req, res) => {
+  res.status(403).send('my faild')
+})
+
+app.delete('/deleteTable/:table', (req, res) => {
+  con.query(`DROP TABLE ${req.params.table}`, function (err, result) {
+    if (err) {
+      res.status(403).send(err);
+    }
+    res.send(result)
+  });
+})
+
 app.get('/tabledata/:table', (req, res) => {
   con.query(`SELECT * FROM ${req.params.table}`, function (err, result) {
     if (err) {
