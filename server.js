@@ -1,39 +1,49 @@
+require('./config/config.js')
 const mysql = require('mysql');
 const express = require('express')
 const bodyParser = require('body-parser')
 const fallback = require('express-history-api-fallback')
 
-// var webpack = require('webpack')
-// var webpackDevMiddleware = require('webpack-dev-middleware')
-// var webpackHotMiddleware = require('webpack-hot-middleware')
+var webpack = require('webpack')
+var webpackDevMiddleware = require('webpack-dev-middleware')
+var webpackHotMiddleware = require('webpack-hot-middleware')
 
-// var webpackConfig = require('./webpack.config.js')
+var webpackConfig = require('./webpack.config.js')
 
 var app = express();
 
-// var compiler = webpack(webpackConfig);
-//
-// app.use(webpackDevMiddleware(compiler, {
-//   publicPath: webpackConfig.output.publicPath,
-//     noInfo: true,
-//     stats: {
-//       colors: true
-//     }
-// }))
-//
-// app.use(webpackHotMiddleware(compiler))
+var compiler = webpack(webpackConfig);
+
+app.use(webpackDevMiddleware(compiler, {
+  publicPath: webpackConfig.output.publicPath,
+    noInfo: true,
+    stats: {
+      colors: true
+    }
+}))
+
+app.use(webpackHotMiddleware(compiler))
 
 var con = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : 'yp037629701',
-  database : 'vueex'
+  host: "localhost",
+  user: process.env.USER,
+  password: process.env.PASSWORD,
+  database: process.env.DATABASE
 });
 
 app.use(bodyParser.json())
 app.use(express.static(__dirname))
 
 con.connect();
+
+app.delete('/deleteTable/:table', (req, res) => {
+  con.query(`DROP TABLE ${req.params.table}`, function (err, result) {
+    if (err) {
+      res.status(403).send(err);
+    }
+    res.send(result)
+  });
+})
 
 
 app.post('/insertTable', (req, res) => {
@@ -67,11 +77,16 @@ app.get('/tableData/:table', (req, res) => {
 })
 
 app.get('/findTable', (req, res) => {
-  con.query(`SHOW TABLES IN vueex`, (err, result) => {
+  con.query(`SHOW TABLES IN ${process.env.DATABASE}`, (err, result) => {
     if (err) {
       res.status(401).send(err);
     }
-    res.send(result)
+    var data = []
+    result.map((r,i) => {
+      let key = Object.keys(r)
+      data.push({tables: result[i][key]})
+    })
+    res.send(data)
   })
 })
 
@@ -85,6 +100,6 @@ app.get('/api', (req, res) => {
 
 app.use(fallback('index.html', { root: __dirname }))
 
-app.listen(3000, () => {
-  console.log('start up port 3000');
+app.listen(process.env.PORT, () => {
+  console.log('start up port '+process.env.PORT);
 })

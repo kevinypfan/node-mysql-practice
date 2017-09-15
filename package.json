@@ -5,9 +5,9 @@
   "author": "kevinypfan <kevin_ypfan@yahoo.com.tw>",
   "private": true,
   "scripts": {
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
     "build": "cross-env NODE_ENV=production webpack --watch --progress --hide-modules",
-    "start": "node app.js"
+    "prod": "NODE_ENV=product node app.js",
+    "dev": "node server.js"
   },
   "dependencies": {
     "axios": "^0.16.2",

@@ -8,7 +8,8 @@ export const store = new Vuex.Store({
     state: [],
     title: 'Hello',
     newTable: null,
-    alertBox: false
+    alertBox: false,
+    url: 'http://localhost:3000'
   },
   mutations: {
     setNewTable (state, payload) {
@@ -30,7 +31,7 @@ export const store = new Vuex.Store({
     },
     insertTable ({commit}, payload) {
       return new Promise((resolve, reject) => {
-        Vue.axios.post('/insertdata', payload)
+        Vue.axios.post('/insertTable', payload)
           .then((result) => {
             resolve();
           }).catch((err) => {

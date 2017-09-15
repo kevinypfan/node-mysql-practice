@@ -2,8 +2,8 @@
 <div>
   <app-alert v-if="getAlertBox" title="確認是否刪除" :description="$route.params.id" @result="deleteTable"></app-alert>
   <ul class="nav nav-tabs">
-    <router-link v-for="t in tabsLink" :to="t.link" :key="t.Tables_in_nodedata" tag="li">
-      <a class="nav-link" activeClass="active">{{t.Tables_in_nodedata}}</a>
+    <router-link v-for="t in tabsLink" :to="t.link" :key="t.tables" tag="li">
+      <a class="nav-link" activeClass="active">{{t.tables}}</a>
     </router-link>
   </ul>
   <app-table :table="table"></app-table>
@@ -22,12 +22,12 @@ export default {
     }
   },
   created () {
-    this.axios.get(`/tabledata/${this.$route.params.id}`).then((result) => {
+    this.axios.get(`/tableData/${this.$route.params.id}`).then((result) => {
       this.table = result.data
     }).catch((err) => {
       console.log(err);
     })
-    this.axios.get('/tablename').then((result) => {
+    this.axios.get('/findTable').then((result) => {
       this.tabs = result.data
     }).catch((err) => {
       console.log(err);
@@ -43,7 +43,7 @@ export default {
     },
     tabsLink () {
       return this.tabs.map((t) => {
-        t.link = `/tables/${t.Tables_in_nodedata}`
+        t.link = `/tables/${t.tables}`
         return t
       })
     },
@@ -53,7 +53,7 @@ export default {
   },
   watch: {
     getParams(value) {
-      this.axios.get(`/tabledata/${this.$route.params.id}`).then((result) => {
+      this.axios.get(`/tableData/${this.$route.params.id}`).then((result) => {
         this.table = result.data
       }).catch((err) => {
         console.log(err);
@@ -68,10 +68,10 @@ export default {
             // console.log(this.tabs)
             this.tabs = this.tabs.filter((t) => {
               console.log(t)
-              return t.Tables_in_nodedata !== result
+              return t.tables !== result
             })
             // console.log(this.tabs)
-            this.$router.push(`/tables/${this.tabs[0].Tables_in_nodedata}`)
+            this.$router.push(`/tables/${this.tabs[0].tables}`)
           }).catch((err) => {
 //dew
           })
